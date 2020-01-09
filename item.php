@@ -20,11 +20,12 @@ function getRandomWord($len = 10) {
     // return substr(implode($word), 0, $len);
 	return(session_id());
 }
+$params=array();
+parse_str($_SERVER['QUERY_STRING'], $params);
 
-parse_str($_SERVER['QUERY_STRING']);
 
-if ( isset($nextpage) ) { 
-	$item = $nextpage;
+if ( array_key_exists('nextpage', $params) ) { 
+	$item = $params['nextpage'];
 } 
 else { 
 	// Grab a random page to start with
@@ -44,13 +45,13 @@ for ( $i=0; $i < sizeof($_SESSION['item']); $i++ ) {
 }
 
 $ratingsession = $_SESSION['item'][$itemno]['rating'];
-if ( isset( $rating ) ) { 
-	$_SESSION['item'][$itemno]['rating'] = $rating; 
+if ( array_key_exists('rating', $params) ) { 
+	$_SESSION['item'][$itemno]['rating'] = $params['rating']; 
 }
 
 // Write item ratings to php log whenever ratings are changed
-if ( isset( $favorite ) ) {
-
+if ( array_key_exists('favorite', $params) ) {
+    $favorite = $params['favorite'];
     $clientip = $_SERVER['HTTP_CLIENT_IP']?$_SERVER['HTTP_CLIENT_IP']:($_SERVER['HTTP_X_FORWARDE‌​D_FOR']?$_SERVER['HTTP_X_FORWARDED_FOR']:$_SERVER['REMOTE_ADDR']);
 	$_SESSION['name'] = $_SESSION['item'][$itemno]['name'];
 	$_SESSION['rating'] = $_SESSION['item'][$itemno]['rating'];
